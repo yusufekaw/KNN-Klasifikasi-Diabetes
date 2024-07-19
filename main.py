@@ -4,20 +4,21 @@ if __name__ == "__main__":
     # Tentukan path ke dataset
     dataset_path = 'data/dataset/diabetes.csv'
     
-    # Buat instance dari DataProcessor
+    # Buat instance dari pemrosesan dara
     proses_data = ProsesData(dataset_path)
     
-    # Muat data
-    data = proses_data.load_data()
-    
-    # Tampilkan data
-    if data is not None:
-        print(data)
+    # Memuat dataset
+    dataset = proses_data.ambilData()
+    print("data mentahan")
+    print(dataset)
 
-    # Lakukan label encoding secara dinamis pada kolom string
-    encoded_data, label_encoders = proses_data.label_encode_columns()
-    
-    # Tampilkan data setelah encoding
-    if encoded_data is not None:
-        print("\nData setelah encoding:")
-        print(encoded_data)
+    # Bagi data menjadi X_train, X_test, y_train, y_test
+    X_train, X_test, y_train, y_test = proses_data.Split(test_size=0.3, random_state=42)
+    print("\nX_train:")
+    print(X_train)
+    print("\nX_test:")
+    print(X_test)
+    print("\ny_train:")
+    print(y_train)
+    print("\ny_test:")
+    print(y_test)
