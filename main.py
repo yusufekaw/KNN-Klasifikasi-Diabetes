@@ -27,7 +27,7 @@ if __name__ == "__main__":
     print(y_test)
 
     knn = KNN()
-    K=3
+    K=7
 
     print("proses menghitung jarak . . .")
     matriks_jarak = []
