@@ -31,15 +31,18 @@ def evaluate_knn(X, y, train_size, k):
     
     # Menghitung akurasi
     accuracy = accuracy_score(y_test, y_pred)
-    return y_test, y_pred, accuracy
+    correct_predictions = (y_test == y_pred).sum()
+    incorrect_predictions = (y_test != y_pred).sum()
+    
+    return y_test, y_pred, accuracy, correct_predictions, incorrect_predictions
 
 # Melakukan evaluasi untuk setiap kombinasi proporsi dan K
 results = {}
 for proportion in proportions:
     results[proportion] = {}
     for k in k_values:
-        y_test, y_pred, accuracy = evaluate_knn(X, y, proportion, k)
-        results[proportion][k] = (y_test, y_pred, accuracy)
+        y_test, y_pred, accuracy, correct_predictions, incorrect_predictions = evaluate_knn(X, y, proportion, k)
+        results[proportion][k] = (y_test, y_pred, accuracy, correct_predictions, incorrect_predictions)
 
 # Menampilkan hasil
 for proportion, result in results.items():
@@ -48,6 +51,10 @@ for proportion, result in results.items():
     y_pred_9 = result[9][1]
     accuracy_7 = result[7][2]
     accuracy_9 = result[9][2]
+    correct_predictions_7 = result[7][3]
+    incorrect_predictions_7 = result[7][4]
+    correct_predictions_9 = result[9][3]
+    incorrect_predictions_9 = result[9][4]
 
     # Membuat dataframe
     y_test_pred_df = pd.DataFrame({
@@ -57,16 +64,24 @@ for proportion, result in results.items():
     })
 
     # Menyimpan ke file .txt
-    filename = f'data/dataset/proporsi_{int(proportion*100)}.txt'
+    filename = f'proporsi_{int(proportion*100)}_log.txt'
     with open(filename, 'w') as f:
         f.write(f'Proportion: {proportion*100:.0f}%\n')
         f.write(f'Accuracy for K=7: {accuracy_7:.4f}\n')
-        f.write(f'Accuracy for K=9: {accuracy_9:.4f}\n\n')
-        f.write(y_test_pred_df.to_string(index=True))
+        f.write(f'Correct predictions for K=7: {correct_predictions_7}\n')
+        f.write(f'Incorrect predictions for K=7: {incorrect_predictions_7}\n\n')
+        f.write(f'Accuracy for K=9: {accuracy_9:.4f}\n')
+        f.write(f'Correct predictions for K=9: {correct_predictions_9}\n')
+        f.write(f'Incorrect predictions for K=9: {incorrect_predictions_9}\n\n')
+        f.write(y_test_pred_df.to_string(index=False))
     
     # Menampilkan hasil di konsol
+    print(y_test_pred_df.head(10))
     print(f'Proportion: {proportion*100:.0f}%')
-    print(y_test_pred_df)
     print(f'Accuracy for K=7: {accuracy_7:.4f}')
+    print(f'Correct predictions for K=7: {correct_predictions_7}')
+    print(f'Incorrect predictions for K=7: {incorrect_predictions_7}')
     print(f'Accuracy for K=9: {accuracy_9:.4f}')
+    print(f'Correct predictions for K=9: {correct_predictions_9}')
+    print(f'Incorrect predictions for K=9: {incorrect_predictions_9}')
     print()
